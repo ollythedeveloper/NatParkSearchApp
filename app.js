@@ -23,10 +23,12 @@ function getNationalParks(state1, state2, state3){
     if(response.ok){
       return response.json();
     }
-    //throw new Error(response.statusText)
+    throw new Error(response.statusText)
   })
   .then(responseJson => displayResults(responseJson));
-  //.catch(error => alert('Something went wrong:');
+  .catch(err => {
+      $('#js-error-message').text(`Something went wrong: ${(err.message)}`);
+  });
 }
 
 
