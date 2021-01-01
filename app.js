@@ -26,9 +26,9 @@ function getNationalParks(state1, state2, state3){
     throw new Error(response.statusText)
   })
   .then(responseJson => displayResults(responseJson));
-  .catch(err => {
-      $('#js-error-message').text(`Something went wrong: ${(err.message)}`);
-  });
+  //.catch(err => {
+      //$('#js-error-message').text(`Something went wrong: ${(err.message)}`);
+  //});
 }
 
 
