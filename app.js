@@ -2,22 +2,36 @@
 const rootURL = 'https://developer.nps.gov/api/v1/parks?'
 const myAPI = 'n8HqTggp5FckAzPEjE1CRl6Tc5longlwqScWIj3Y'
 
+function formatQuearyParams(params){
+  const queryItems = Object.keys(params)
+  .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+  return queryItems.join('&');
+}
+
 function displayResults(responseJson){
-    console.log(responseJson)
+    //console.log(responseJson)
   $('#results-list').empty();
   for (let i = 0; i < responseJson.data.length; i++){
     $('#results-list').append(
       `<li><h3><a href=${responseJson.data[i].url}>${responseJson.data[i].fullName}</a></h3>
       <p>${responseJson.data[i].description}</p>
-      <h4>States: ${responseJson.data[i].states}</h4>
       </li>`
     )};
   $('#results').removeClass('hidden');
 };
 
 
-function getNationalParks(state1, state2, state3){
-  const url = rootURL + 'stateCode=' + state1+ '&stateCode=' + state2 + '&stateCode=' + state3 + '&api_key='+myAPI;
+function getNationalParks(states, maxResults){
+  const params= {
+    stateCode: states,
+    limit: maxResults,
+    api_key: myAPI
+  };
+  const queryString = formatQuearyParams(params)
+  const url = rootURL + queryString;
+
+  console.log(url);
+
   fetch(url)
   .then(response => {
     if(response.ok){
@@ -35,10 +49,9 @@ function getNationalParks(state1, state2, state3){
 function watchForm(){
   $('#js-form').submit(event => {
     event.preventDefault();
-    const state1 = $('#js-state1').val();
-    const state2 = $('#js-state2').val();
-    const state3 = $('#js-state3').val();
-    getNationalParks(state1, state2, state3);
+    const states = $('#js-states').val();
+    const maxResults = $('#js-max-results').val();
+    getNationalParks(states, maxResults);
   });
 }
 
